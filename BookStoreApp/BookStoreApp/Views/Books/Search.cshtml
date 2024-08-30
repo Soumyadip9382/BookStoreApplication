@@ -1,0 +1,67 @@
+﻿@model List<BookStoreApp.Models.Book>
+<head>
+    <title>Search Result</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Add any additional CSS styles if needed -->
+</head>
+<body>
+
+    <div class="container">
+        <h2>Search Result</h2>
+        @if (Model.Count == 0)
+        {
+            <p>No results found.</p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ISBN</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Genre</th>
+                        <th>Price</th>
+                        <th>PopuLarity</th>
+                        <!-- Add more table headers as needed -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var book in Model)
+                    {
+                        <tr>
+                            <td>@book.ISBN</td>
+                            <td>@book.Title</td>
+                            <td>@book.AuthorName</td>
+                            <td>@book.GenreName</td>
+                            <td>@book.Price</td>
+                            <td>@book.Popularity</td>
+                            <td><a asp-action="Details" asp-route-id="@book.BookID" class="btn btn-success"><i class="fa-solid fa-circle-info"></i></a></td>
+                            <td>
+                                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                        <input type="hidden" name="id" value="@book.BookID" />
+                                        <button type="submit" class="btn btn-primary float-end card-cart-btn">
+                                            <i class="fa-solid fa-cart-plus"></i>
+                                        </button>
+                                    </form></td>
+                                    <td>
+                                    <form asp-controller="WishList" asp-action="AddToWishList" method="post">
+                                        <input type="hidden" name="id" value="@book.BookID" />
+                                        <button type="submit" class="btn btn-secondary float-end wish_btn">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </button>
+                                    </form>
+                            </td>
+                            
+                            <!-- Add more table cells with book information as needed -->
+                        </tr>
+                        
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <a asp-action="Index" asp-controller="HomeCard" class="btn btn-success btn-back-home"><i class="fa-solid fa-arrow-left"></i>Back to Home</a>
+
+</body>
+

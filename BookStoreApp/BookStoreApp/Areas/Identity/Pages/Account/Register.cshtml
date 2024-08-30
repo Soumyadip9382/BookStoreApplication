@@ -1,0 +1,94 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
+    bool hideNavbar = true;
+}
+
+@if (hideNavbar)
+{
+    <style>
+        /* CSS to hide the navbar */
+        .navbar {
+            display: none;
+        }
+    </style>
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+        @* <div class="form-floating mb-3">
+            <input asp-for="Input.UserUserName" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <label asp-for="Input.UserUserName">UserName</label>
+            <span asp-validation-for="Input.UserUserName" class="text-danger"></span>
+        </div> *@
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <label asp-for="Input.Email">Email</label>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.FullName" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <label asp-for="Input.FullName">Full Name</label>
+            <span asp-validation-for="Input.FullName" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Address" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <label asp-for="Input.Address">Address</label>
+            <span asp-validation-for="Input.Address" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <label asp-for="Input.PhoneNumber">Phone Number</label>
+            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <select asp-for="Input.UserType" class="form-select" aria-label="User Type">
+                <option value="Customer">Customer</option>
+                <option value="Admin">Admin</option>
+            </select>
+            <label asp-for="Input.UserType">User Type</label>
+            <span asp-validation-for="Input.UserType" class="text-danger"></span>
+        </div>
+
+        <!-- Verification Key for Admin -->
+        <div class="form-floating mb-3" id="verificationKeyField" style="display:none;">
+            <input asp-for="Input.VerificationKey" class="form-control" autocomplete="off" aria-required="true" placeholder="Verification Key" />
+            <label asp-for="Input.VerificationKey">Verification Key</label>
+            <span asp-validation-for="Input.VerificationKey" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+            <label asp-for="Input.Password">Password</label>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+            <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+        </div>
+        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Show or hide the verification key field based on user type selection
+        $('#Input_UserType').change(function () {
+            var userType = $(this).val();
+            if (userType === 'Admin') {
+                $('#verificationKeyField').show();
+            } else {
+                $('#verificationKeyField').hide();
+            }
+        });
+    </script>
+}

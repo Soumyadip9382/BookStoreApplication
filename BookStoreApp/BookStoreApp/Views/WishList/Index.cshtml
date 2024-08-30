@@ -1,0 +1,46 @@
+﻿@model IEnumerable<BookStoreApp.Models.Wishlist>
+
+@{
+    ViewData["Title"] = "Wishlist";
+}
+
+<h2>Wishlist</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Book.Title</td>
+                    <td>@item.Book.Price.ToString("c")</td>
+                    <td>
+                        <a href="@Url.Action("Details", "HomeCard", new { id = item.BookID })" class="btn btn-info"><i class="fa-solid fa-circle-info"></i></a>
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="@item.BookID" />
+                            <button type="submit" class="btn btn-success"><i class="fa-solid fa-cart-plus"></i></button>
+                        </form>
+
+                        <form asp-controller="WishList" asp-action="RemoveFromWishlist" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="@item.WishlistID" />
+                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Your wishlist is empty.</p>
+    <a asp-controller="HomeCard" asp-action="Index" asp-route-id="" class="btn btn-success"><i class="fa-solid fa-book"></i>Browse Books</a>
+}

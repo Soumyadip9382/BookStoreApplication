@@ -1,0 +1,58 @@
+﻿@model IEnumerable<BookStoreApp.Models.Cart>
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h2>Your Cart</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Book.Title</td>
+                    <td>
+                        <form asp-controller="Cart" asp-action="UpdateQuantity" method="post">
+                            <input type="hidden" name="id" value="@item.BookID" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" />
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </td>
+                    <td>@item.Book.Price.ToString("c")</td>
+                    <td>@((item.Quantity * item.Book.Price).ToString("c"))</td>
+                    <td>
+                        <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
+                            <input type="hidden" name="id" value="@item.BookID" />
+                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <h4>Total Amount: @Model.Sum(item => item.Quantity * item.Book.Price).ToString("c")</h4>
+    </div>
+    <div>
+        <td><a asp-controller="HomeCard" asp-action="Index" asp-route-id="" class="btn btn-success"><i class="fa-solid fa-shopping-cart"></i>Continue Shopping</a></td>
+        <td><a asp-controller="OrderPayment" asp-action="Payment" asp-route-id="" asp-route-totalAmount="@Model.Sum(item => item.Quantity * item.Book.Price)" class="btn btn-success"><i class="fa-solid fa-money-bill-wave"></i>Buy Now</a></td>
+    </div>
+}
+else
+{
+    <p>Your cart is empty.</p>
+    <td><a asp-controller="HomeCard" asp-action="Index" asp-route-id="" class="btn btn-success"><i class="fa-solid fa-shopping-cart"></i>Continue Shopping</a></td>
+}

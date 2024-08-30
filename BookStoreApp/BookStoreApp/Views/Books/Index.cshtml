@@ -1,0 +1,114 @@
+﻿@model IEnumerable<BookStoreApp.Models.Book>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Books List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary" style="vertical-align:middle"><i class="fa-solid fa-book"></i>Create New</a>
+    <h4>OR</h4>
+    <form asp-action="Import" asp-controller="Books" method="post" enctype="multipart/form-data" class="d-inline" style="vertical-align: middle;">
+        <label for="file" class="btn btn-success" style="vertical-align:middle"><i class="fa-solid fa-file-excel"></i>Import From Excel Sheet</label>
+        <input type="file" id="file" name="file" style="display: none;" onchange="handleFileSelect(event)">
+        <span id="file-selected"></span>
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="display: none;vertical-align:middle">Submit</button>
+    </form>
+</p>
+
+<form method="get" action="@Url.Action("Index")">
+    <div class="d-flex justify-content-end">
+        <div class="form-group col-md-4">
+            <input type="text" class="form-control" id="searchTerm" name="searchTerm" placeholder="Search by Title,ISBN,Author,Genre">
+        </div>
+        <div class="form-group col-md-1">
+            <button type="submit" class="btn btn-primary mx-2"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ISBN)
+            </th>
+            <th class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th class="col-sm-2">
+                @Html.DisplayNameFor(model => model.AuthorName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GenreName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoverImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Availability)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ISBN)
+            </td>
+            <td class="col-sm-2">
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+                <td class="col-sm-2">
+                @Html.DisplayFor(modelItem => item.AuthorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GenreName)
+            </td>
+            <td>
+                    <img src="@item.CoverImage" alt="Book Cover" style="max-width: 100px; max-height: 100px; align-content:center" class="shadow bg-body rounded " />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+                <td style="align-content:center">
+                    @if (item.Availability)
+                    {
+                        <i class="fa-solid fa-check ps-4" style="color:lawngreen"></i>
+                    }
+                    else
+                    {
+                        <i class="fa-solid fa-xmark ps-4" style="color:red"></i>
+                    }
+                </td>
+                <td style="align-content:center">
+                    <a asp-action="Edit" asp-route-id="@item.BookID" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></a> |
+                    <a asp-action="Details" asp-route-id="@item.BookID" class="btn btn-success"><i class="fa-solid fa-circle-info"></i></a> |
+                    <a asp-action="Delete" asp-route-id="@item.BookID" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<script>
+    function handleFileSelect(event) {
+        const fileInput = event.target;
+        const fileLabel = document.getElementById('file-selected');
+        const submitBtn = document.getElementById('submit-btn');
+
+        if (fileInput.files.length > 0) {
+            // Display the selected file name
+            fileLabel.textContent = fileInput.files[0].name;
+            // Show the submit button
+            submitBtn.style.display = 'inline-block';
+        } else {
+            // If no file selected, reset the label and hide the submit button
+            fileLabel.textContent = '';
+            submitBtn.style.display = 'none';
+        }
+    }
+</script>

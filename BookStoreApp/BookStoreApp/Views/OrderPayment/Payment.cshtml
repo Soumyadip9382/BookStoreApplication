@@ -1,0 +1,60 @@
+﻿@model BookStoreApp.Models.User
+@{
+    ViewData["Title"] = "Payment";
+}
+
+<h2>Payment</h2>
+    <div>
+        <!-- Display order details -->
+        <h3>Order Details</h3>
+        <p>Name: @ViewBag.User.FullName</p>
+        <p>Shipping Address: @ViewBag.User.Address</p>
+        <p>Phone Number:@ViewBag.User.PhoneNumber</p>
+        <p>Total Amount: @ViewBag.TotalAmount.ToString("c")</p>
+    <p>Select Payment Method:
+    <input type="radio" id="cashOnDelivery" name="paymentMethod" value="Cash On Delivery" checked>
+    <label for="cashOnDelivery">Cash On Delivery</label>
+        <input type="radio" id="cashOnDelivery" name="paymentMethod" value="Cash On Delivery" checked>
+        <label for="cashOnDelivery">UPI</label><br />
+
+</p>
+
+        <!-- Purchase confirmation button -->
+    <div style="display: flex;justify-content: space-around;">
+                <form id="purchaseForm" method="post">
+                    <input type="hidden" name="orderId" id="orderId" />
+                    <button type="button" onclick="purchase()" class="btn btn-primary">Confirm Purchase</button>
+                </form>
+          
+            <a asp-controller="Cart" asp-action="Index" asp-route-id="" class="btn btn-success"><i class="fa-solid fa-shopping-cart"></i>Return To Cart</a>
+        </div>
+        
+    </div>
+
+<script>
+    function purchase() {
+        // Execute AJAX POST request to trigger the Purchase action
+        $.ajax({
+            url: '/OrderPayment/Purchase',
+            type: 'POST',
+            success: function (data) {
+                // Check if purchase was successful
+                if (data.success) {
+                    // Show success message
+                    alert('Your order has been placed!');
+                    // Redirect to the home page after the user clicks OK
+                    window.location.href = '/HomeCard/Index';
+                } else {
+                    // Show error message if needed
+                    alert('Error placing the order.');
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors if needed
+                console.error(xhr.responseText);
+            }
+        });
+    }
+</script>
+
+

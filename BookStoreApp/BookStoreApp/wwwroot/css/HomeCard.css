@@ -1,0 +1,75 @@
+﻿.a-cleanup {
+    color: inherit;
+    text-decoration: none;
+}
+
+    .a-cleanup:hover {
+        color: inherit;
+    }
+
+
+.c-body{
+    display:flex;
+    flex-direction:column;
+    justify-content:left;
+}
+
+.wish_btn {
+    margin-right: 4px;
+}
+
+    .wish_btn:hover {
+        background-color: red;
+        border: none;
+    }
+
+.card-img-custom {
+    width: 100%;
+    height: 17vw;
+    object-fit:contain;
+}
+
+
+.store-card {
+    transition: all 0.2s ease;
+}
+
+    .store-card:hover {
+        transform: scale(1.03);
+        box-shadow: lightgray 2px 5px 5px 2px;
+    }
+
+.card-cart-btn {
+    transition: all 0.2s ease;
+}
+
+    .card-cart-btn:hover {
+        background-color: green;
+        border: 1px solid green;
+    }
+
+.cart-btn {
+    transition: all 0.2s ease;
+    margin-right: 25%;
+}
+
+    .cart-btn:hover {
+        background-color: green;
+        border: 1px solid green;
+    }
+
+.btn-back-home:hover{
+    background-color:darkorange;
+}
+
+.Body_content {
+    padding-top: 55px;
+    /*background-color: #b399ff;
+    object-fit: cover;
+    background-attachment: fixed;*/
+}
+
+.det-img:hover {
+    transform: scale(1.05);
+    box-shadow: lightgray 2px 5px 5px 2px;
+}

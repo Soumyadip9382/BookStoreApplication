@@ -1,0 +1,113 @@
+﻿@model BookStoreApp.Models.User
+
+@{
+    ViewData["Title"] = "SignUp";
+    bool hideNavbar = true;
+}
+
+@if (hideNavbar)
+{
+    <style>
+        /* CSS to hide the navbar */
+        .navbar {
+            display: none;
+        }
+    </style>
+}
+
+<style>
+    .label_txt{
+        padding-left:35px;
+        font-weight:400;
+        font-size:large;
+    }
+    .btn_class{
+        padding:10px;
+    }
+</style>
+
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<div class="container pt-1">
+    <div class="row justify-content-center">
+        <div class="col-md-6" style="background-color:grey;color:white;border-radius:20px">
+            <h3 style="text-align:center;">SignUp</h3>
+            <form asp-action="Create" class="wrapper">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Username" class="control-label label_txt">User Name</label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label label_txt">Email Address</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label label_txt">Password</label>
+                    <input type="password" asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FullName" class="control-label label_txt"></label>
+                    <input asp-for="FullName" class="form-control field" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label label_txt"></label>
+                    <input asp-for="Address" class="form-control field" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="control-label label_txt"></label>
+                    <input asp-for="PhoneNumber" class="form-control field" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserType" class="control-label label_txt">User Type</label>
+                    <select asp-for="UserType" class="form-control" id="userType">
+                        <option value="">Choose the user type</option>
+                        <option value="Customer">Customer</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                    <span asp-validation-for="UserType" class="text-danger"></span>
+                </div>
+                <div id="verificationKeyField" class="form-group" style="display: none;">
+                    <label for="verificationKey" class="label_txt">Verification Key</label>
+                    <input type="text" class="form-control" id="verificationKey" name="verificationKey">
+                </div>
+                <div class="form-group d-flex justify-content-sm-around btn_class p-2">
+                    <button type="submit" class="btn btn-success">Signup</button>
+                    Already Have an Account?
+                    <a href="~/Users/Login" class="btn btn-primary">Log In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $('#userType').change(function () {
+            if ($(this).val() === 'Admin') {
+                $('#verificationKeyField').show();
+            } else {
+                $('#verificationKeyField').hide();
+                $('#verificationKey').val('customer');
+            }
+        });
+    </script>
+}
+
+

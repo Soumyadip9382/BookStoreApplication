@@ -1,0 +1,80 @@
+﻿@model IEnumerable<BookStoreApp.Models.Order>
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h2>Order History</h2>
+
+<form method="get" action="@Url.Action("Index")">
+    <div class="d-flex justify-content-end">
+        <label for="startDate" class="m-2">From: </label>
+        <div class="form-group col-md-2">
+            <input type="date" class="form-control" id="startDate" name="startDate">
+        </div>
+        <label for="endDate" class="m-2">To:</label>
+        <div class="form-group col-md-2">
+            
+            <input type="date" class="form-control" id="endDate" name="endDate">
+        </div>
+        <div class="form-group col-md-1">
+            <button type="submit" class="btn btn-primary mx-2"><i class="fa-solid fa-filter"></i>Filter</button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Book Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total Amount</th>
+                <th>Order Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                foreach (var orderDetail in order.OrderDetails)
+                {
+                    <tr>
+                        <td>@orderDetail.Book.Title</td>
+                        <td>@orderDetail.Quantity</td>
+                        <td>@orderDetail.UnitPrice.ToString("c")</td>
+                        <td>@order.TotalAmount.ToString("c")</td>
+                        <td>@order.OrderDate.ToShortDateString()</td>
+                        <td>@order.Status</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-end">
+        @{
+            DateTime startDateFilter = DateTime.MinValue;
+            DateTime endDateFilter = DateTime.MaxValue;
+
+            var startDateParam = ViewContext.HttpContext.Request.Query["startDate"];
+            var endDateParam = ViewContext.HttpContext.Request.Query["endDate"];
+
+            if (!string.IsNullOrEmpty(startDateParam) && !string.IsNullOrEmpty(endDateParam))
+            {
+                DateTime.TryParse(startDateParam, out startDateFilter);
+                DateTime.TryParse(endDateParam, out endDateFilter);
+            }
+        }
+
+        <a href="@Url.Action("GenerateInvoice", new { startDate = startDateFilter, endDate = endDateFilter })" class="btn btn-success"><i class="fa-solid fa-file-invoice"></i>Generate Invoice</a>
+    </div>
+
+
+
+}
+else
+{
+    <h3>No Order Details Found</h3>
+    <a asp-controller="HomeCard" asp-action="Index" asp-route-id="" class="btn btn-success"><i class="fa-solid fa-book"></i>Browse Books</a>
+}

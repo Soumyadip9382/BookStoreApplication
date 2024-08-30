@@ -1,0 +1,85 @@
+﻿@model PaginatedList<BookStoreApp.Models.Book>
+@using BookStoreApp.Controllers
+
+@{
+    ViewData["Title"] = "Store";
+}
+<h2 class="my-4">Store</h2>
+
+@* <form class="form-inline mt-3 mb-3 d-flex justify-content-end" method="get" action="@Url.Action("Search", "Books")">
+    <input class="form-control mr-sm-2 w-25 px-3" type="search" placeholder="Search" aria-label="Search" name="searchTerm">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form> *@
+<form method="get" action="@Url.Action("Index")">
+    <div class="d-flex justify-content-end">
+        <div class="form-group col-md-4">
+            <input type="text" class="form-control" id="searchQuery" name="searchQuery" placeholder="Search by title,author,genre and ISBN">
+        </div>
+        <div class="form-group col-md-1">
+            <button type="submit" class="btn btn-primary mx-2"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+</form>
+
+
+<div class="row">
+    @foreach (var book in Model)
+    {
+        <div class="col-3">
+            <div class="card my-2 store-card">
+                <a class="a-cleanup" asp-controller="HomeCard" asp-action="Details" asp-route-id="@book.BookID">
+                    <img src="@book.CoverImage" class="card-img-top card-img-custom pt-2" />
+                    <div class="card-body" style="height:10em">
+                        <h5 class="mb-3">@book.Title</h5>
+                        <p class="mb-3">@book.Popularity <i class="fa-solid fa-star" style="color:yellow"></i></p>
+                        <span class="card-text">@book.Price.ToString("c")</span>
+                    </div>
+                    <div>
+                        <form asp-controller="HomeCard" asp-action="AddToCart" method="post">
+                            <input type="hidden" name="id" value="@book.BookID" />
+                            <input type="hidden" name="returnUrl" value="@ViewData["CurrentUrl"]" /> <!-- Include the current URL -->
+                            <button type="submit" class="btn btn-primary float-end card-cart-btn">
+                                <i class="fa-solid fa-cart-plus"></i>
+                            </button>
+                        </form>
+                        @{
+                            var wishlistBookIds = ViewData["WishlistBookIds"] as List<int>;
+                            bool isBookInWishlist = wishlistBookIds.Contains(book.BookID);
+                            string btnClass = isBookInWishlist ? "btn btn-danger float-end wish_btn" : "btn btn-secondary float-end wish_btn";
+                        }
+                        <form asp-controller="HomeCard" asp-action="AddToWishList" method="post">
+                            <input type="hidden" name="id" value="@book.BookID" />
+                            <input type="hidden" name="returnUrl" value="@ViewData["CurrentUrl"]" /> <!-- Include the current URL -->
+                            <button type="submit" class="@btnClass">
+                                <i class="fa-solid fa-heart"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item"><a class="page-link" href="?page=1"><i class="fa-solid fa-angles-left"></i></a></li>
+            <li class="page-item"><a class="page-link" href="?page=@(Model.PageIndex - 1)"><i class="fa-solid fa-chevron-left"></i></a></li>
+        }
+        @for (int i = Model.PageIndex - 1; i <= Model.PageIndex + 1; i++)
+        {
+            if (i >= 1 && i <= Model.TotalPages)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")"><a class="page-link" href="?page=@i">@i</a></li>
+            }
+        }
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item"><a class="page-link" href="?page=@(Model.PageIndex + 1)"><i class="fa-solid fa-chevron-right"></i></a></li>
+            <li class="page-item"><a class="page-link" href="?page=@Model.TotalPages"><i class="fa-solid fa-angles-right"></i></a></li>
+        }
+    </ul>
+</nav>

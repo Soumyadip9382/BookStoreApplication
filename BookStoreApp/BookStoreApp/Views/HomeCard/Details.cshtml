@@ -1,0 +1,140 @@
+﻿@model BookStoreApp.Models.Book
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div class="row">
+    <div class="col-9">
+        <div>
+            <h4>Book</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.ISBN)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.ISBN)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Title)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Title)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.AuthorName)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.AuthorName)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.GenreName)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.GenreName)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Price)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Page)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Page)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Popularity)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Popularity)  <i class="fa-solid fa-star" style="color:yellow"></i>
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.PublicationDate)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.PublicationDate)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Availability)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Availability)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+
+                @*<dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CreatedDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CreatedDate)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.UpdatedDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.UpdatedDate)
+                </dd>
+                 <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Author)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Author.AuthorID)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.User)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.User.Id)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Genre)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Genre.GenreID)
+                </dd> *@
+            </dl>
+        </div>
+
+        <div>
+            <a href="javascript:history.back()" class="btn btn-success btn-back-home">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </a>
+            <div>
+                <form asp-controller="HomeCard" asp-action="AddToCart" method="post">
+                    <input type="hidden" name="id" value="@Model.BookID" />
+                    <input type="hidden" name="returnUrl" value="@ViewData["CurrentUrl"]" /> <!-- Include the current URL -->
+                    <button type="submit" class="btn btn-primary float-end card-cart-btn">
+                        <i class="fa-solid fa-cart-plus"></i>
+                    </button>
+                </form>
+            </div>
+            @{
+                var wishlistBookIds = ViewData["WishlistBookIds"] as List<int>;
+                bool isBookInWishlist = wishlistBookIds.Contains(@Model.BookID);
+                string btnClass = isBookInWishlist ? "btn btn-danger float-end wish_btn" : "btn btn-secondary float-end wish_btn";
+            }
+            <form asp-controller="HomeCard" asp-action="AddToWishList" method="post">
+                <input type="hidden" name="id" value="@Model.BookID" />
+                <input type="hidden" name="returnUrl" value="@ViewData["CurrentUrl"]" /> <!-- Include the current URL -->
+                <button type="submit" class="@btnClass">
+                    <i class="fa-solid fa-heart"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="col-3" ">
+        <img src="@Model.CoverImage" class="w-100 shadow mb-5 bg-body rounded det-img" />
+    </div>
+</div>
